@@ -41,10 +41,11 @@ const ruleOptions = {
   telegram: true, // Telegram通讯软件
   line: false, // Line通讯软件
   whatsapp: false, // Whatsapp
-  games: true, // 游戏策略组
+  games: false, // 游戏策略组
   japan: true, // 日本网站策略组
   // tracker: true, // 网络分析和跟踪服务
   ads: true, // 常见的网络广告
+  steam: true, // Steam游戏平台
 }
 
 const skipIps = [
@@ -147,6 +148,11 @@ const regionDefinitions = [
     regex: /澳大利亚|🇦🇺|au|australia|sydney/i,
     icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Australia.png',
   },
+  // {
+  //   name: '低倍率',
+  //   regex: /0.1|0.01|0.5/i,
+  //   icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Airport.png',
+  // },
 ]
 const excludeHighPercentage = true
 const globalRatioLimit = 2
@@ -345,6 +351,13 @@ const serviceConfigs = [
     icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png',
     url: 'http://www.telegram.org/img/website_icon.svg',
     rules: ['GEOIP,telegram,Telegram'],
+  },
+  {
+    key: 'steam',
+    name: 'Steam',
+    icon: 'https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Steam.png',
+    url: 'https://store.steampowered.com/',
+    rules: ['GEOSITE,steam@cn,国内网站', 'GEOSITE,steam,Steam'],
   },
   {
     key: 'whatsapp',
