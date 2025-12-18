@@ -42,7 +42,7 @@ const ruleOptions = {
   line: false, // Line通讯软件
   whatsapp: false, // Whatsapp
   games: false, // 游戏策略组
-  japan: true, // 日本网站策略组
+  japan: false, // 日本网站策略组
   // tracker: true, // 网络分析和跟踪服务
   ads: true, // 常见的网络广告
   steam: true, // Steam游戏平台
@@ -158,11 +158,17 @@ const excludeHighPercentage = true
 const globalRatioLimit = 2
 
 // DNS 配置
-const chinaDNS = ['119.29.29.29', '223.5.5.5']
-const foreignDNS = [
+const chinaDNS = [
   'https://doh.pub/dns-query',
   'https://dns.alidns.com/dns-query',
 ]
+const foreignDNS = [
+  'https://dns.opendns.com/dns-query',
+  'https://dns.google/dns-query',
+  'https://dns.cloudflare.com/dns-query',
+  'https://dns.adguard-dns.com/dns-query',
+]
+const defaultDNS = ['119.29.29.29', '223.5.5.5']
 const dnsConfig = {
   enable: true,
   listen: ':1053',
@@ -188,16 +194,21 @@ const dnsConfig = {
     'geosite:category-bank-jp',
     'geosite:category-bank-cn@!cn',
   ],
-  nameserver: foreignDNS,
-  fallback: chinaDNS,
-  'fallback-filter': {
-    geoip: true,
-  },
-  'proxy-server-nameserver': foreignDNS,
+  nameserver: chinaDNS,
+  'default-nameserver': defaultDNS,
+  'direct-nameserver': defaultDNS,
+  // fallback: foreignDNS,
+  // 'fallback-filter': {
+  //   geoip: true,
+  //   'geoip-code': 'CN',
+  // },
+  'proxy-server-nameserver': defaultDNS,
   'nameserver-policy': {
     'geosite:private': 'system',
-    'geosite:tld-cn,cn,steam@cn,category-games@cn,microsoft@cn,apple@cn':
-      chinaDNS,
+    'geosite:tld-cn,cn,steam@cn,category-games@cn,microsoft@cn,apple@cn,category-game-platforms-download@cn,category-public-tracker':
+      defaultDNS,
+    'geosite:gfw': chinaDNS,
+    // 'geosite:telegram': foreignDNS,
   },
 }
 
@@ -651,6 +662,8 @@ function main(config) {
   // 3.4 添加通用兜底策略组
   rules.push(
     'GEOSITE,private,DIRECT',
+    'GEOSITE,category-public-tracker,DIRECT',
+    'GEOSITE,category-game-platforms-download@cn,DIRECT',
     'GEOIP,private,DIRECT,no-resolve',
     'GEOSITE,cn,国内网站',
     'GEOIP,cn,国内网站,no-resolve',
